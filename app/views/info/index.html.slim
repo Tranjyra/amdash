@@ -1,0 +1,8 @@
+
+div.row
+  div.col-2
+    div.nav.flex-column.nav-pills.sticky-top.rounded-lg.border style="top:5em" role="tablist" aria-orientation="vertical"
+      = link_to "Документы", info_docs_path, class: "nav-link #{'active' if action_name == 'docs'}"
+      = link_to "Помощь", info_help_path, class: "nav-link #{'active' if action_name == 'help'}"
+  div.col-3
+    == yield

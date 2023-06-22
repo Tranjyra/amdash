@@ -1,0 +1,6 @@
+div.card.w-50.m-auto
+  div.card-header.d-flex
+    span.font-weight-bold = @staff.name
+    span.ml-auto = @staff.staff_type
+  div.card-body
+    = link_to "Изменить", edit_admin_staff_path(@staff), class: "card-link"

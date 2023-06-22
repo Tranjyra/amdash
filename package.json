@@ -1,0 +1,10 @@
+{
+  "name": "am-dashboard",
+  "private": true,
+  "dependencies": {
+    "actiontext": "https://github.com/kobaltz/actiontext",
+    "bootstrap": "^4.3.1",
+    "cropper": "~4.0.0",
+    "jquery": "^3.4.1"
+  }
+}

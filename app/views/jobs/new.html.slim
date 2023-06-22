@@ -1,0 +1,12 @@
+h2 Запланировать выезд
+div.form-wrapper.col-5
+  - if current_user.admin?
+    == render 'form_admin'
+  - else
+    == render 'form'
+br
+//= javascript_include_tag '/view/job_create_edit_work_desc'
+
+javascript:
+    EvaluateTextarea();
+

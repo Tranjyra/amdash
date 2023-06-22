@@ -1,0 +1,33 @@
+div
+  = form_with(model: [:admin, @staff]) do |f|
+    div.form-group
+      = f.label :Имя
+      = f.text_field :name, class: "form-control", placeholder: "Имя стафа"
+    div.form-group
+      = f.label :Логический_тип
+      = f.select :staff_type, options_for_select(Staff.staff_types.keys, (@staff.staff_type if @staff.staff_type)), {}, {class: "form-control", id: 'type'}
+    div.form-group id="zone_optional" style="#{'display: none;' if @staff.staff_type == 'Зона' || @staff.staff_type == 'Видеорегистратор'}"
+      = f.label :Зона
+      = f.select :zone_id, options_for_select(select_zones, (@staff.zone_id if @staff.zone_id)), {}, {class: 'form-control', id: 'zone'}
+    div.form-group.form-check id="formCheckReqOpt" style="#{'display: none;' if @staff.staff_type == 'Зона' || @staff.staff_type == 'Видеорегистратор'}"
+      = f.check_box :required, class: "form-check-input", id: "reqCheck"
+      = f.label "Обязательный", class: "form-check-label", for: "reqCheck"
+    div.form-check id="supervised" style="#{'display: none;' if @staff.staff_type == 'Зона' || @staff.staff_type == 'Видеорегистратор'}"
+      = f.check_box :supervised, class: 'form-check-input', id: "supervisedCheck"
+      = f.label "Наблюдаемый", for: "supervisedCheck"
+    div.form-group
+      = f.submit value: "Сохранить", class: "btn btn-outline-primary", data: {disable_with: "Сохранение"}
+
+javascript:
+  $('#type').on('change', function (e) {
+      if(e.target.selectedOptions[0].value === 'Оборудование' || e.target.selectedOptions[0].value === 'Отчет'){
+          $('#zone_optional').css('display', 'block');
+          $('#formCheckReqOpt').css('display', 'block');
+          $('#supervised').css('display', 'block');
+      }else{
+          $('#zone_optional').css('display', 'none');
+          $('#formCheckReqOpt').css('display', 'none');
+          $('#supervised').css('display', 'none');
+          $('#zone').val('nil');
+      }
+  });

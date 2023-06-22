@@ -1,0 +1,13 @@
+= form_with(model: @registrator, url: [@store, @job, @registrator]) do |f|
+  = f.hidden_field :job_id, value: @job.id
+  div.form-group
+    = f.label :Модель_регистратора
+    = f.select :model_id, options_for_select(select_registrators), {}, {class: 'form-control'}
+  div.form-group
+    = f.label :ip, "IP"
+    = f.text_field :ip_address, class: 'form-control'
+  div.form-group
+    = f.label :Колличество_камер
+    = f.select :cum_count, options_for_select(1..16), {}, {class: 'form-control'}
+  div.form-group
+    = f.submit value: "Сохранить", class: 'btn btn-primary'

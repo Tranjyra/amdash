@@ -1,0 +1,16 @@
+
+div.bd-reports
+  div.row
+    div.col-2
+      div.nav.flex-column.nav-pills.sticky-top.rounded-lg.border style="top:5em" role="tablist" aria-orientation="vertical"
+        = link_to "Документы", info_docs_path, class: "nav-link  #{'active btn-secondary' if action_name == 'docs'}"
+        = link_to "Помощь", info_help_path, class: "nav-link #{'active btn-secondary' if action_name == 'help'}"
+    div.col-4
+      == yield
+
+      ul class="list-group list-group-flush"
+        li class="list-group-item"Cras justo odio
+        li class="list-group-item"Dapibus ac facilisis in
+        li class="list-group-item"Morbi leo risus
+        li class="list-group-item"Porta ac consectetur ac
+        li class="list-group-item"Vestibulum at eros

@@ -1,0 +1,6 @@
+$('h5[data-target="modal-title"]').html("Изменить категорию <%= @category.name %>");
+$('div[data-target="modal-body"]').html(`<%= render partial: 'info/category/form_edit',locals: {"@category": @category} %>`)
+$("#loading_image_modal").css('display','none');
+//, locals: {"@docs": @docs}
+
+$('div.btnModalDelete').html(`<%= link_to image_tag("menu/bin2.png", style: 'width:26px; vertical-align:middle; margin:0px'),  info_category_path(@category.id), method: :delete, data: {confirm: "Удалить категорию?"} if current_user.admin? %>`)

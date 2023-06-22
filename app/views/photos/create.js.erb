@@ -1,0 +1,4 @@
+$('#photoCardColumns').append(`<%= render partial: 'photos/photo', locals: {photo: @photo} %>`)
+$('#modalPhoto').modal('hide');
+$('#myTabContent').tab('show');
+location.reload();

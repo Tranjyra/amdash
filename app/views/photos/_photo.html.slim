@@ -1,0 +1,12 @@
+div.card id="#{photo.id}"
+  = link_to "", job_photo_path(@job, photo), class: "card-link stretched-link", remote: true
+  div
+    div class="container12"
+      = fa_icon "check", style: "color: green; position: absolute; top: 5px; right: 5px", class: "fa-2x" if photo.checked
+      = image_tag url_for(try_resize(photo.image, '400x400')), class: "card-img-top imgwithtext1" if photo.image.attached?
+      - if photo.comment?
+        div.imgsubtitle.breakwrap #{photo.comment}
+  div.card-body.d-none
+    p.card-text.d-flex
+      span
+        /span.ml-auto style="position: relative" = link_to "Удалить", job_photo_path(@job, photo), method: :delete, class: "btn btn-outline-danger", data: {confirm: "Вы уверены что хотите удалить #{photo.comment}?"} if current_user.admin?

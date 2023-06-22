@@ -1,0 +1,2 @@
+$('#user-<%= @user.id %>').replaceWith(`<%= render partial: 'user', locals: {user: @user} %>`);
+$('#exampleModal').modal('hide');

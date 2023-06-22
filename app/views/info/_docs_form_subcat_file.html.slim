@@ -1,0 +1,22 @@
+div
+  = form_with do |f|
+    div.form-group
+      = f.label :Имя_документа*
+      = f.text_field :name, class: "form-control", placeholder: "Имя", required: true
+    div.form-group
+      = f.label :Краткое_описание
+      = f.text_field :desc, class: "form-control", placeholder: "Описание"
+    div.form-group
+      = f.label :Полная_ссылка_к_файлу
+      = f.text_field :source_url, class: "form-control", placeholder: "Ссылка"
+    div.form-group
+      //PARENT CATEGORY ID
+      = f.hidden_field :category_id, value: 1
+      //PARENT SUBcategory ID, 0 - это и есть subcategory
+      = f.hidden_field :subcategory_id, value: @subcategory_current
+      //Flag: 1 = category, 2 = subcat, 3 - file
+      = f.hidden_field :base_type, value: 3
+
+      = f.hidden_field :created_by, value: current_user.id
+      = f.submit value: "Сохранить", class: "btn btn-outline-primary", data: {disable_with: "Сохранение"}
+

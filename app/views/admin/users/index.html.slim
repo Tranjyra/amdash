@@ -1,0 +1,29 @@
+div.form-group
+  div.input-group
+    input.form-control type="text" placeholder="Имя пользователя" oninput="search_user(this.value)"
+    div.input-group-append
+      = link_to "Добавить пользователя", "#exampleModal", class: "btn btn-outline-secondary", "data-action":"new", "data-toggle":"modal", "data-target":"#exampleModal"
+div.card-columns data-target="user-index-wrapper"
+  == render partial: 'user', collection: @users
+
+== render 'modal'
+
+javascript:
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        $event = $(event.relatedTarget).attr('data-action');
+        switch ($event) {
+            case "new":
+                $.get(
+                    "/admin/users/new",
+                    {fortam: "js"}
+                );
+                break;
+            case "edit":
+                $userid = $(event.relatedTarget).attr('data-user-id');
+                $.get(
+                    `/admin/users/${$userid}/edit`,
+                    {fortam: "js"}
+                );
+                break;
+        }
+    });

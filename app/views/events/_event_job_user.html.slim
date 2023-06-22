@@ -1,0 +1,33 @@
+- if event.subject.id
+  div class="card #{( "event-card" if context == "dropdown")} eventblock"  data-context="#{context}" id="event-card-#{event.id}" style="width: 100%"
+    div.card-header.event-card.d-flex
+      strong Изменение работы
+      span.ml-auto.pr-2
+        small.font-weight-light = distance_of_time_in_words(event.created_at, DateTime.now)
+      - unless event.readed
+        = link_to user_event_path(event.user, event, event: {readed: true}), method: :put, remote: true, class: "close", "aria-label": "Close" do
+          span aria-hidden="true" &times;
+      - else
+        span
+          small.font-weight-light Прочитано
+    div.card-body.event-card
+      p.card-text
+        ='link_to "#{event.from_user.name}", user_path(event.from_user)
+        'изменил cтатус
+        ='link_to "работы", job_path(event.subject)
+      p.card-text
+        'в магазине
+        - if event.subject.store
+          ='link_to "#{event.subject.store.name}", store_path(event.subject.store)
+      p.card-text
+        span ='"Новый статус:"
+        strong = event.subject.status.name
+      /- if !!event.comment
+        div.card-text style="width: 200px; word-break:break-all; text-align: center;"
+          ='"С комментарием:"
+          span.font-italic = event.comment
+- else
+  p.text-center class="event-card-nil-#{event.id}"
+    'Событие ссылается на удаленный элемент
+    = link_to user_event_path(event.user, event), method: :delete, remote: true, class: "close", "aria-label": "Close" do
+      span aria-hidden="true" &times;

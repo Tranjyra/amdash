@@ -1,0 +1,49 @@
+div
+  = form_with url: info_file_index_path, method: :post do |f|
+    div.form-group
+      = f.label :Имя_документа
+      = f.text_field :name, class: "form-control", placeholder: "Имя", required: true
+    div.form-group
+      = f.label :Краткое_описание
+      = f.text_area :desc, cols: "10", rows: "3", placeholder: "Описание", class: "form-control"
+    /div.form-group
+        = f.label :Полная_ссылка_к_файлу
+        = f.text_field :source_url, class: "form-control", placeholder: "Ссылка"
+    div.custom-file style="margin-bottom:10px"
+      = f.file_field :filecustom, accept: "*/*",direct_upload: true,  class: "custom-file-input", id: "customFile", onchange:"Filevalidation()", required: true
+      = f.label :Выберите_файл, for: "customFile", class: "custom-file-label", id: "fileLabel"
+    div.form-group
+      //PARENT CATEGORY ID
+      = f.hidden_field :category_id, value: @category.id
+      //PARENT SUBcategory ID, 0 - это и есть subcategory
+      = f.hidden_field :subcategory_id, value: @subcategory.id
+      = f.submit value: "Выгрузить на сервер", class: "btn btn-outline-primary", data: {disable_with: "Выгрузка и создание..."}
+
+
+
+
+javascript:
+
+    Filevalidation = () => {
+        const fi = document.getElementById('customFile');
+        // Check if any file is selected.
+        if (fi.files.length > 0) {
+            for (var i = 0; i <= fi.files.length - 1; i++) {
+
+                const fsize = fi.files.item(i).size;
+                const file = Math.round((fsize / 1024));
+                // The size of the file.
+                if (file >= 30720) {
+                    alert("Файл не будет загружен, его размер превышает 30 Мб");
+                    $("#customFile").val('');
+                } else if (file < 1) {
+                    alert("Размер файла менее одного килобайта, пропускаем... ");
+                    $("#customFile").val('');
+                } else {
+                    //document.getElementById('size').innerHTML = '<b>'+ file + '</b> KB';
+                }
+            }
+        }
+    };
+
+

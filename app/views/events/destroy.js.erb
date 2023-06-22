@@ -1,0 +1,2 @@
+remove_event_from_dropdown(<%= @event.id %>, <%= current_user.events.unreaded.count %>);
+$('.event-card-nil-<%= @event.id %>').remove();

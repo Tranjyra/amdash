@@ -1,0 +1,159 @@
+<%
+
+  #fAdmin = @current_user.admin
+  #@current_user_id=1
+
+  fOwner = (@current_user.id == @job.user.id)
+  #fOwner=true
+  add_image1=''
+  page_sn_mess=""
+
+  fShowStatusLine = true
+  fShowDescription = false
+  group = case @job_action
+
+          when "create"
+            page_action = "Работа запланирована"
+            page_title = page_action
+            page_mess1 = "запланировал работу для инженера"
+            if fOwner then page_mess1 = "запланировал работу" end
+            fShowStatusLine = false
+            fShowDescription = true
+          when "return_to_work"
+            page_action = "Работа была отклонена"
+            page_title = page_action
+            page_mess1 = "отклонил работу"
+            if fOwner then page_mess1 = "отклонил свою работу" end
+            fShowStatusLine = true
+          when  "before_done_send_to_admin"
+            page_action = "Работа на рассмотрении"
+            page_title = page_action
+            page_mess1 = "отправил работу на рассмотрение"
+            if fOwner then page_mess1 = "отправил свою работу на рассмотрение" end
+            fShowStatusLine = false
+          when  "done"
+            page_action = "Работа завершена"
+            page_title = page_action
+            page_mess1 = "одобрил и завершил работу"
+            if fOwner then page_mess1 = "завершил свою работу" end
+            fShowStatusLine = false
+
+            add_image1='glyphicon-ok'
+          when  "accept"
+            page_action = "Работа подтверждена"
+            page_title = page_action
+            page_mess1 = "подтвердил проведение работы"
+            if fOwner then page_mess1 = "подтвердил проведение своей работы" end
+            fShowStatusLine = true
+            fShowDescription = true
+
+            #(@job.job_type.id==2 || @job.job_type.id==4) &&
+            if !@job.sn_inc.blank? && !@job.sn_sys_id.blank? && @job.sn_inc!='0' && @job.sn_sys_id!='0'
+              page_sn_mess="Создана заявка в ServiceNow - "
+            end
+
+          else
+            page_action = "Изменение работы"
+            page_title = page_action
+            page_mess1 = "изменил работу"
+            if fOwner then page_mess1 = "изменил свою работу" end
+          end
+
+
+
+
+  page_title=page_title+" ("+@job.job_type.name+")"
+  #if @current_user.id==19 || @current_user.id==27 then page_title=page_title+'test' end
+
+%>
+
+<head><title><%= page_title %></title></head>
+<preview><%= page_title %></preview>
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="text-center">
+        <strong>
+          <% if add_image1  %>
+            <span class="glyphicon <%= add_image1 %>" aria-hidden="true"></span>
+            <%= page_action %>
+          <% else  %>
+
+            <%= page_action %>
+          <% end  %>
+
+        </strong>
+      </h5>
+      <hr>
+
+      <% if !fOwner  %>
+
+        <p class="text-center">
+          <strong><%= @current_user.name %></strong>
+        </p>
+        <p class="text-center">
+          <%= page_mess1+" ("+@job.job_type.name+")" %>
+        </p>
+
+        <p class="text-center">
+          <span>(ответственный <strong><%= link_to @job.user.name, user_url(@job.user) %></strong>)</span>
+        </p>
+
+      <% else  %>
+
+        <p class="text-center">
+          <strong><%= link_to @job.user.name, user_url(@job.user) %></strong>
+        </p>
+        <p class="text-center">
+          <%= page_mess1+" ("+@job.job_type.name+")" %>
+        </p>
+
+      <% end  %>
+
+      <p class="text-center">
+        от
+        <%= human_date @job.start_date %> в магазине:
+      </p>
+      <p class="text-center">
+        <%= link_to @job.store.pure_name, store_url(@job.store) %>
+      </p>
+      <% if @comment!=nil && @comment!=''  %>
+        <p class="text-center" >
+          <u>С комментарием:</u>
+          <br>
+        <div style="width: 200px; word-break:break-all; text-align: center;">
+          <i><%= @comment %></i>
+          <%# simple_format- to allow LINE BREAKS. %>
+        </div>
+        </p>
+        <br>
+      <% end  %>
+      <% if @job.job_type.id==4 && fShowDescription %>
+        <p class="text-center" >
+          <u>Описание выезда:</u>
+          <br>
+        <div style="width: 200px; word-break:break-all; text-align: center;">
+          <i><%= simple_format(@job.description,{},wrapper_tag: "span") %></i>
+          <%# simple_format- to allow LINE BREAKS. %>
+        </div>
+        </p>
+        <br>
+      <% end  %>
+
+      <% if fShowStatusLine  %>
+        <p class="text-center"><strong>Новый статус:&nbsp;</strong> <%= @job.status.name %></p>
+      <% end  %>
+
+      <% if page_sn_mess.length>6  %>
+        <br>
+        <p class="text-center">
+          <%= page_sn_mess  %>
+          <%= link_to @job.sn_inc, Constants::SN_LINK+'/sc_req_item.do?sys_id=' +@job.sn_sys_id, target: :_blank %>
+        </p>
+      <% end  %>
+
+      <hr>
+      <%= link_to "Просмотреть", @url, class: "btn btn-primary mx-auto" %>
+    </div>
+  </div>
+</div>

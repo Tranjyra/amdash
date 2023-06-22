@@ -1,0 +1,29 @@
+= form_with(model: [:admin, @user]) do |f|
+  - if action_name == "new"
+    div.form-group
+      = f.label :Имя_пользователя
+      div.input-group
+        = f.text_field :username, class: "form-control", id: "username", required: true, "user-selected":"false" ,placeholder: "Имя пользователя в домене", "aria-haspopup":"true", "aria-expanded":"false", "data-toggle":"dropdown", autocomplete:"off"
+        div class="dropdown-menu w-100" aria-labelledby="username" id="users"
+        div.input-group-append
+          button.btn.btn-outline-secondary id="clear-form" type="button" Очистить
+  div.form-group
+    = f.label :Полное_имя
+    = f.text_field :fullname, id: "displayName", class: "form-control", placeholder: "Полное имя", required: true
+  div.form-group
+    = f.label :Электронная_почта
+    = f.text_field :email, id: "email" , class: "form-control", placeholder: "Доменный email", required: true
+  div.form-group
+    = f.label :Роль
+    = f.select :role_id, options_for_select([["Пользователь", 2],["Администратор", 1]], (@user.role_id unless @user.nil?)), {}, {class: "form-control"}
+  div.form-check
+    = f.check_box :supervisor, class: 'form-check-input', id: "supervisorCheck"
+    = f.label "Может оценивать работы", for: "supervisorCheck"
+  div.form-check
+    = f.check_box :flocal, class: 'form-check-input', id: "flocal"
+    = f.label "Локальный пользователь (не AD)", for: "flocal"
+  div.form-group
+    = f.label "Пароль (если пользователь локальный), будет сохранен в БД"
+    = f.text_field :password, id: "password", class: "form-control", placeholder: "Пароль"
+  div.form-group
+    = f.submit value: "Сохранить", id:"submit", class: "btn btn-outline-primary"

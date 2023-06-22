@@ -1,0 +1,110 @@
+
+
+div.bd-reports
+  div.row
+    div.col-2
+      div.nav.flex-column.nav-pills.sticky-top.rounded-lg.border style="top:5em" role="tablist" aria-orientation="vertical"
+        = link_to "Документы", info_docs_path, class: "nav-link  #{'active btn-secondary' if action_name == 'docs'}"
+        = link_to "Помощь", info_help_path, class: "nav-link #{'active btn-secondary' if action_name == 'help'}"
+    div.col-3
+      == yield
+
+
+      /= @staff = Staff.all
+      /== render partial: 'admin/staffs/staff', collection: @staff
+      - if current_user.admin?
+        div
+          button.btn.btn-outline-secondary data-toggle="modal" data-target="#exampleModal" data-action="addnew_subcat" Добавить категорию
+
+      - if current_user.admin?
+        div
+          button.btn.btn-outline-secondary data-toggle="modal" data-target="#exampleModal" data-action="addnew_subcat_file" Добавить документ
+
+      div style="margin-left:50px"
+        div.fontsize18
+          'Статусы по автоматизации
+        = link_to "Скачать", info_docs_path, class: "nav-link #{'active' if action_name == 'docs'}"
+        br
+        br
+        div
+          span.fontsize18
+            'Шаблоны отчетов
+          ul.fontsize16 class="list-group list-group-flush"
+            li class="list-group-item"Отчет управляющей
+            li class="list-group-item"Dapibus ac facilisis in
+            li class="list-group-item"Morbi leo risus
+            li class="list-group-item"Porta ac consectetur ac
+            li class="list-group-item"Vestibulum at eros
+
+
+div class="modal" id="exampleModal" tabindex="-1" role="dialog"
+  div class="modal-dialog" role="document"
+    div class="modal-content"
+      div class="modal-header"
+        h5 class="modal-title" data-target="modal-title"
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      div class="modal-body" data-target="modal-body"
+
+
+javascript:
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        $event = $(event.relatedTarget).attr('data-action');
+        switch ($event) {
+            case "addnew_subcat":
+                $.get(
+                    "docs_add_subcat",
+                    {format: "js"}
+                );
+                break;
+            case "addnew_subcat_file":
+                $.get(
+                    "docs_add_subcat_file",
+                    {format: "js"}
+                );
+                break;
+            case "edit":
+                $staffId = $(event.relatedTarget).attr('data-staff-id');
+                $.get(
+                    `docs/${$staffId}/edit`,
+                    {format: "js"}
+                );
+                break;
+        }
+    });
+
+
+    function addnew1() {
+
+        if (!confirm("Добавить новый пункт?")) return;
+
+        $.ajax({
+
+            type: "POST",
+            data: "gameid=" + curGameID + "&gamezad=" + id,
+            url: 'edit/copyzad.php',
+            dataType: 'html',
+            error: function (statusCode, errorThrown) {
+                //$('#full_error').text(getAjaxErr(statusCode));
+                alert(getAjaxErr(statusCode));
+            },
+            success: function (result) {
+
+                $('#full_error').text('задание клонировано');
+
+                if ((zadtype == 4) || (zadtype == 5)) showpodzad(curGameID)
+                else showzad(curGameID);
+
+                if (result != 1) alert('error! ' + result)
+                else
+                    alert('Не забудьте изменить название задания и номер.');
+                //$('#full_error').text(result[0]);
+                //$('#infocodesdiff').html(result[1]);
+
+
+            }
+        });
+
+
+    }

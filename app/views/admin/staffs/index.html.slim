@@ -1,0 +1,29 @@
+div.form-group
+  div.input-group
+    input.form-control type="text" placeholder="Поиск по имени" data="search-staff" oninput="search_staff(this.value)"
+    div.input-group-append
+      button.btn.btn-outline-secondary data-toggle="modal" data-target="#exampleModal" data-action="new" Добавить новый
+div.card-columns data-target="staffs-wrapper"
+  == render partial: 'staff', collection: @staffs
+
+== render 'modal'
+
+javascript:
+  $('#exampleModal').on('show.bs.modal', function (event) {
+      $event = $(event.relatedTarget).attr('data-action');
+      switch ($event) {
+          case "new":
+              $.get(
+                  "staffs/new",
+                  {fortam: "js"}
+              );
+              break;
+          case "edit":
+              $staffId = $(event.relatedTarget).attr('data-staff-id');
+              $.get(
+                  `staffs/${$staffId}/edit`,
+                  {fortam: "js"}
+              );
+              break;
+      }
+  });

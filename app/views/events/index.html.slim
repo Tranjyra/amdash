@@ -1,0 +1,4 @@
+div.w-50.m-auto.events-container
+  h5.text-center = @user.name if @user.id != current_user.id
+  - @user.events.order(created_at: :desc).each do |event|
+    = render partial: "event_#{class_to_s event.subject}_#{event.event_type}", locals: {event: event, context: "index"}

@@ -1,0 +1,8 @@
+$modal = $("#doneModal");
+if ($modal.length > 0){
+    $modal.replaceWith(`<%= render partial: "done_modal_form", locals: {job: @job} %>`)
+}
+else{
+    $("body").append(`<%= render partial: "done_modal_form", locals: {job: @job} %>`);
+}
+$("#doneModal").modal('show');

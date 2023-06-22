@@ -1,0 +1,46 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+
+  pool:  <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+  timeout: 5
+
+development:
+  <<: *default
+#  adapter: sqlite3
+#  database: db/development.sqlite3
+  adapter: mysql2
+  encoding: utf8
+  database: main-db
+  username: rails
+  password: MYSQL_PASSWORD
+  host: 127.0.0.1
+  port: 3306
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  adapter: mysql2
+  encoding: utf8
+  database: main-db
+  username: rails
+  password: MYSQL_PASSWORD
+  host: 127.0.0.1
+  port: 3306
+
+production:
+  <<: *default
+  adapter: mysql2
+  encoding: utf8
+  database: main-db
+  username: rails
+  password: MYSQL_PASSWORD
+  host: 127.0.0.1
+  port: 3306
+

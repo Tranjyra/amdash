@@ -1,0 +1,14 @@
+div.card.m-auto style="width: max-content"
+  div.card-header
+    span =' @photo.zone.name
+    span =' @photo.eq.name.downcase
+    span =' @photo.comment.downcase
+    = fa_icon "check", style: "color: green", class: "ml-auto" if @photo.checked
+  div.card-body.d-flex
+    = image_tag url_for(@photo.image.variant(resize: '768x768', rotate: '0', auto_orient: true)), class: "card-img-middle m-auto"
+  div.card-footer
+    =' link_to "Назад", :back, class: "btn btn-outline-secondary"
+    '|
+    =' link_to "Оригинал", url_for(@photo.image), target: '_blank', class: "btn btn-outline-secondary"
+    '|
+    =' link_to "Удалить", job_photo_path(@job, @photo), method: :delete, class: "btn btn-outline-danger ml-auto", data: {confirm: "Вы уверены что хотите удалить #{@photo.comment}?"} if current_user.admin? || (@photo.job.user.id == current_user.id && @photo.job.status.id.in?([2,5]))

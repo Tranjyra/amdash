@@ -1,0 +1,119 @@
+<%
+  #fAdmin = current_user.admin?
+  fOwner = (@current_user.id == @job.user.id)
+  fShowStatusLine = true
+  fShowDescription = false
+  page_sn_mess=""
+
+  group = case @job_action
+          when "create"
+            page_action = "Работа запланирована"
+            page_title = page_action
+            page_mess1 = "запланировал вам работу"
+            if fOwner then page_mess1 = "Вы запланировали работу" end
+            fShowStatusLine = false
+            fShowDescription = true
+          when "return_to_work"
+            page_action = "Работа была отклонена"
+            page_title = page_action
+            page_mess1 = "отклонил вашу работу"
+            if fOwner then page_mess1 = "Вы отклонили свою работу" end
+            fShowStatusLine = true
+          when  "before_done_send_to_admin"
+            page_action = "Работа на рассмотрении"
+            page_title = page_action
+            page_mess1 = "отправил вашу работу на рассмотрение"
+            if fOwner then page_mess1 = "Вы отправили свою работу на рассмотрение" end
+            fShowStatusLine = false
+          when  "done"
+            page_action = "Работа завершена"
+            page_title = page_action
+            page_mess1 = "одобрил и завершил вашу работу"
+            if fOwner then page_mess1 = "Вы завершили свою работу" end
+            fShowStatusLine = false
+          when  "accept"
+            page_action = "Работа подтверждена"
+            page_title = page_action
+            page_mess1 = "подтвердил проведение вашей работы"
+            if fOwner then page_mess1 = "Вы подтвердили проведение своей работы" end
+            fShowStatusLine = true
+            fShowDescription = true
+
+            #(@job.job_type.id==2 || @job.job_type.id==4) &&
+            if !@job.sn_inc.blank? && !@job.sn_sys_id.blank? && @job.sn_inc!='0' && @job.sn_sys_id!='0'
+              page_sn_mess="Создана заявка в ServiceNow - "
+            end
+
+          else
+            page_action = "Изменение работы"
+            page_title = page_action
+            page_mess1 = "изменил вашу работу"
+            if fOwner then page_mess1 = "Вы изменили свою работу" end
+          end
+
+
+
+
+%>
+<head><title><%= page_title %></title></head>
+<preview><%= page_title %></preview>
+<div class="container">
+  <div class="card">
+    <div class="card-body text-center">
+      <h5 class="text-center"><strong><%= page_action %></strong></h5>
+      <hr>
+
+      <% if !fOwner  %>
+      <p class="text-center">
+        <strong><%= @who.name %></strong>
+      </p>
+      <% end  %>
+
+      <p class="text-center">
+        <%= page_mess1+" ("+@job.job_type.name+")" %>
+        <br>
+        от
+        <%= human_date @job.start_date %> в магазине:
+      </p>
+      <p class="text-center">
+        <%= link_to @job.store.pure_name, store_url(@job.store) %>
+      </p>
+      <% if @comment!=nil && @comment!=''  %>
+        <p class="text-center" >
+          <u>С комментарием:</u>
+          <br>
+        <div style="width: 200px; word-break:break-all; text-align: center;">
+          <i><%= @comment %></i>
+          <%# simple_format- to allow LINE BREAKS. %>
+        </div>
+        </p>
+        <br>
+        <% end  %>
+      <% if @job.job_type.id==4 && fShowDescription  %>
+        <p class="text-center" >
+          <u>Описание выезда:</u>
+          <br>
+        <div style="width: 200px; word-break:break-all; text-align: center;">
+          <i><%= simple_format(@job.description,{},wrapper_tag: "span") %></i>
+          <%# simple_format- to allow LINE BREAKS. %>
+        </div>
+        </p>
+        <br>
+      <% end  %>
+      <% if fShowStatusLine  %>
+      <p class="text-center"><strong>Новый статус:&nbsp;</strong> <%= @job.status.name %></p>
+      <% end  %>
+
+      <% if page_sn_mess.length>6  %>
+        <br>
+        <p class="text-center">
+          <%= page_sn_mess  %>
+          <%= link_to @job.sn_inc, Constants::SN_LINK+'/sc_req_item.do?sys_id=' +@job.sn_sys_id, target: :_blank %>
+        </p>
+      <% end  %>
+
+      <hr>
+      <%= link_to "Просмотреть", @url, class: "btn btn-primary mx-auto" %>
+    </div>
+  </div>
+</div>

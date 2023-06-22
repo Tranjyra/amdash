@@ -1,0 +1,63 @@
+- job = store.jobs.first if store.jobs.any?
+- color = job ? type_color(job.job_type.name) : ""
+
+- if job
+  //- datestr = (job.end_date ? human_date(job.end_date) : human_date(job.start_date).to_s)
+  - datestr = (human_date(job.start_date).to_s)
+  - jobowner = (current_user.id==job.user.id)
+
+- if job && job.status.id!=3
+
+  div class="card card-index border border-#{ color } rounded-lg"
+    div.card-header.bold style="transform: rotate(0);"
+      div.d-flex
+        span = link_to "#{store.name} (#{store.region})", store_path(store), class: "black without-line stretched-link text-#{color}"
+        span.ml-auto = store.s_stat
+      div.d-flex
+        span.text-muted
+          //small = "CODE: #{store.code}"
+          = (job.job_type.name)
+        span.text-muted.ml-auto
+          small = "IDD: #{store.baseidd}"
+    div class="card-body"
+      p class="card-text"
+        = (job.status.name + " " + datestr).capitalize
+        - if jobowner
+          = ", "
+          b = "моя "
+        - else
+          = ", инженер "
+          //= ( (job.end_date ? human_date(job.end_date) : human_date(job.start_date).to_s) + " " + job.status.name ).capitalize + " инженером "
+          = link_to job.user.name, user_path(job.user), style: "transform: rotate(0);"
+
+- else
+
+  div class="card card-index border border-#{ color } rounded-lg"
+    div.card-header.bold style="padding-bottom:0; border-bottom:none; transform: rotate(0);"
+      div.d-flex
+        span = link_to "#{store.name} (#{store.region})", store_path(store), class: "black without-line stretched-link text-#{color}"
+        span.ml-auto = store.s_stat
+      div.d-flex
+        span.text-muted
+          //small = "CODE: #{store.code}"
+          - if job
+            = (job.job_type.name)+", "+datestr
+          - else
+            div style="padding-bottom:12px"
+              = "Нет известных работ"
+
+        span.text-muted.ml-auto
+          small = "IDD: #{store.baseidd}"
+    - if job
+      div.card-header.bold style="padding-top:0; border-bottom:none"
+        div.d-flex
+          span.text-muted.fontsize14
+            = "завершено"
+            - if jobowner
+              b = " мною "
+            - else
+              = " инженером "
+              = link_to job.user.name, user_path(job.user), style: "font-weight: normal;"
+
+
+br

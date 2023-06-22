@@ -1,0 +1,19 @@
+<div class="card m-auto" style="max-width: fit-content">
+  <div class="card-header">
+    <h5 class="text-center"><%= "#{@photo.zone.name} #{@photo.eq.name} #{@photo.comment}".capitalize%>
+      &nbsp;
+      <%= fa_icon "check",
+                  style: "color: green" if @photo.checked %></h5>
+  </div>
+  <%= image_tag(try_resize(@photo.image, "1024x768" ), class: "card-img-middle")  %>
+  <div class="card-footer d-flex">
+    <%= link_to "Отменить подтверждение",
+                url_for(action: 'check', controller: 'photos', only_path: false, photo: {checked: false}),
+                role: "button",
+                class: "btn btn-outline-danger ml-auto" if @photo.checked %>
+    <%= link_to "Подтвердить",
+                url_for(action: 'check', controller: 'photos', only_path: false, photo: {checked: true}),
+                role: "button",
+                class: "btn btn-outline-success ml-auto" unless @photo.checked %>
+  </div>
+</div>

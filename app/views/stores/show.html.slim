@@ -1,0 +1,17 @@
+div.row
+  div.col-sm-4
+    div.sticky-top style="top:5em"
+      == render 'info'
+  div.col-md
+    - @store.jobs.each do |job|
+      - color = type_color(job.job_type.name)
+      div class="card card-index rounded-lg border border-#{ color }"
+        div.card-header.d-flex.bold style="transform: rotate(0)"
+          span
+            //= link_to "#{job.job_type.name} от #{ human_date(job.end_date ? job.end_date : job.start_date) }", store_job_path(@store.code, job), class: "without-line stretched-link text-#{ color }"
+            = link_to "#{job.job_type.name} от #{ human_date(job.start_date) }", store_job_path(@store.code, job), class: "without-line stretched-link text-#{ color }"
+          span.ml-auto
+            = job.status.name
+        div.card-body
+          p.card-text = link_to job.user.name, user_path(job.user) if job.user
+      br

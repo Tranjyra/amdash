@@ -1,0 +1,6 @@
+div.btn-group
+  button.btn.btn-primary.dropdown-toggle type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" Добавить
+  div.dropdown-menu
+    = link_to "Фото", new_job_photo_path(@job), class: "dropdown-item", remote: true
+    = link_to "Патч-панель", new_job_patch_panel_path(@job), class: "dropdown-item", remote: true
+    = link_to  "Видеорегистратор", new_job_registrator_path(@job), class: 'dropdown-item', remote: true

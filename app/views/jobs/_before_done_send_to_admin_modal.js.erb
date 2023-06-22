@@ -1,0 +1,8 @@
+$modal = $("#beforedoneModal");
+if ($modal.length > 0){
+    $modal.replaceWith(`<%= render partial: "before_done_send_to_admin_modal_form", locals: {job: @job} %>`)
+}
+else{
+    $("body").append(`<%= render partial: "before_done_send_to_admin_modal_form", locals: {job: @job} %>`);
+}
+$("#beforedoneModal").modal('show');

@@ -1,0 +1,24 @@
+$('div[data-target="stores-index-wrapper"]').html(
+    `<%= 'ddfd'
+    render partial: 'store', collection: @stores
+
+    if  @stores.count< 1
+       ' div.text-center
+         По указанным критериям поиска работы не найдены.
+         br
+          Попробуйте изменить запрос...
+        br '
+    end
+    'ddfd'
+    if @stores.count>1
+
+    'div style="text-align:center"
+      div style="padding-bottom:20px"
+        b
+          Найдено магазинов:
+        b'
+         @stores.count
+     end
+
+    %>`
+)

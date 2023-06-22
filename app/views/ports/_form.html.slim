@@ -1,0 +1,19 @@
+= form_with(model: @port, url: [@job, @patch_panel, @port]) do |f|
+  div.form-group.form-check
+    = f.check_box :empty, class: 'form-check-input', id: "checkEmpty"
+    = f.label :Порт_расшит, class: "form-check-label", for: "checkEmpty"
+  div.form-group.form-check
+    = f.check_box :used, class: 'form-check-input', id: "checkUsed"
+    = f.label :Порт_используется, class: "form-check-label", for: "checkUsed"
+  div.form-group
+    = f.label :Комментарий
+    = f.text_field :comment, class: 'form-control'
+  div.form-group
+    = f.label "Короткое описание (5 символов)"
+    = f.text_field :short_description, class: 'form-control', maxlength: 5
+  div.form-group
+    = f.label :Оборудование
+    = f.select :eq_id, options_for_select(select_eq, (@port.eq_id ? @port.eq_id : 0)), {}, { class: "form-control", id: 'eqSelect' }
+  hr.my-2
+  div.form-group.d-flex
+    = f.submit :Сохранить, class: "btn btn-primary ml-auto"

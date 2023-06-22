@@ -1,0 +1,9 @@
+$('h5[data-target="modal-title"]').html("Изменить документ <%= @file.name %>");
+$('div[data-target="modal-body"]').html(`<%= render partial: 'info/file/form_edit',locals: {"@category": @category,"@subcategory": @subcategory, "@file": @file} %>`)
+$("#loading_image_modal").css('display','none');
+
+$('div.btnModalDelete').html(`<%= link_to image_tag("menu/bin2.png", style: 'width:26px; vertical-align:middle; margin:0px'),  info_file_path(@file.id, :cid=>@category.id,:sid=>@subcategory.id ), title:"Удалить", method: :delete, data: {confirm: "Удалить файл?"} if current_user.admin? %>`)
+
+//
+
+//, locals: {"@docs": @docs}

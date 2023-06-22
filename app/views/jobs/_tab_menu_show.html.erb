@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="photo-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="home" aria-selected="true">Фотографии</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="patch-panel-tab" data-toggle="tab" href="#patch-panel" role="tab" aria-controls="profile" aria-selected="false">Патч-панель</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="registrator-tab" data-toggle="tab" href="#registrator-panel" role="tab" aria-controls="profile" aria-selected="false">Видеорегистратор</a>
+  </li>
+  <% if @job.job_type_id==1 %>
+  <li class="nav-item">
+    <a class="nav-link" id="reportopen-tab" data-toggle="tab" href="#reportopen-panel" role="tab" aria-controls="profile" aria-selected="false">Отчет об открытии</a>
+  </li>
+  <% end %>
+</ul>
+<br>

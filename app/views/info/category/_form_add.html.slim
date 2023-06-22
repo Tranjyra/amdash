@@ -1,0 +1,10 @@
+div
+  = form_with url: info_category_index_path, method: :post do |f|
+    div.form-group
+      = f.label :Название_категории
+      = f.text_field :name, class: "form-control", placeholder: "Название", required: true
+    div.form-group
+      = f.label :Описание
+      = f.text_area :desc, cols: "10", rows: "3", placeholder: "Необязательно", class: "form-control"
+    div.form-group
+      = f.submit value: "Сохранить", class: "btn btn-outline-primary", data: {disable_with: "Сохранение"}

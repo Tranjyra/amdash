@@ -1,0 +1,21 @@
+div.row
+  div.col id="formFields"
+    = form_with(model: @photo, url: [@job, @photo]) do |f|
+      = f.hidden_field :job_id, value: @job.id
+      div.form-group
+        = f.label :Комментарий
+        = f.text_field :comment, class: "form-control"
+      div.form-group
+        = f.label :Зона
+        = f.select :zone_id, options_for_select(select_zones), {}, {class: "form-control", id: 'zoneSelect'}
+      div.form-group
+        = f.label :Оборудование
+        = f.select :eq_id, options_for_select(select_eq(select_zones.first[1])), {}, { class: "form-control", id: 'eqSelect' }
+      div.form-group id="fileInput"
+        = f.label :Фотография
+        div.custom-file
+          = f.file_field :image, class: "custom-file-input", id: "customFile", accept: "image/*"
+          = f.label :Выберите_изображение, for: "customFile", class: "custom-file-label", id: "fileLabel"
+      div.form-group
+        = f.submit value: "Загрузить", class: "btn btn-outline-primary", data: {disable_with: "Загрузка фотографии"}
+  div.col id="previewFile"

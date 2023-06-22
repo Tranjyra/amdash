@@ -1,0 +1,7 @@
+$('h5[data-target="modal-title"]').html("Изменить подкатегорию <%= @subcategory.name %>");
+$('div[data-target="modal-body"]').html(`<%= render partial: 'info/subcategory/form_edit',locals: {"@category": @category,"@subcategory": @subcategory} %>`)
+$("#loading_image_modal").css('display','none');
+
+$('div.btnModalDelete').html(`<%= link_to image_tag("menu/bin2.png", style: 'width:26px; vertical-align:middle; margin:0px'),  info_subcategory_path(@subcategory.id, :cid=>@category.id), method: :delete, data: {confirm: "Удалить подкатегорию?"} if current_user.admin? %>`)
+
+//, locals: {"@docs": @docs}

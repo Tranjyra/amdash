@@ -1,0 +1,12 @@
+h1 Отредактировать выезд
+div.form-wrapper style="max-width: 50%"
+  - if current_user.admin?
+    == render 'jobs/form_admin'
+  - else
+    == render 'form'
+
+
+//= javascript_include_tag '/app/js/view/job_create_edit_work_desc'
+
+javascript:
+    EvaluateTextarea();

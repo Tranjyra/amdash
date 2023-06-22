@@ -1,0 +1,11 @@
+div.card id="user-#{user.id}"
+  div.card-header.d-flex
+    span.font-weight-bold = user.name
+    / span.ml-auto =' user.user_role.role
+    div.ml-auto
+      span.priv-icon == render partial: "layouts/letter_icon", locals: {letter: "A"} if user.admin?
+      span.priv-icon == render partial: "layouts/letter_icon", locals: {letter: "U"} unless user.admin?
+      span.priv-icon title="Может подтверждать инвентаризацию" == render partial: "layouts/letter_icon", locals: {letter: "S"} if user.supervisor
+      span.priv-icon title="Локальный пользователь" == render partial: "layouts/letter_icon", locals: {letter: "L"} if user.flocal
+  div.card-body
+    = link_to "Изменить", "#", class: "card-link", "data-action":"edit", "data-toggle":"modal", "data-target":"#exampleModal", "data-user-id": user.id

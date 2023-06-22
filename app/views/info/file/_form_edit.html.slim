@@ -1,0 +1,28 @@
+div
+  = form_with model:@file, url: info_file_path(:id=>@file.id) do |f|
+    div.form-group
+      = f.label :Имя_документа
+      = f.text_field :name, class: "form-control", placeholder: "Имя", required: true
+    div.form-group
+      = f.label :Краткое_описание
+      = f.text_area :desc, cols: "10", rows: "3", placeholder: "Описание", class: "form-control"
+    /div.form-group
+        = f.label :Полная_ссылка_к_файлу
+        = f.text_field :source_url, class: "form-control", placeholder: "Ссылка"
+    div.form-group
+    - if @file.filecustom && @file.filecustom.attached?
+      'Загруженное вложение:
+      span.font-italic
+        = @file.filecustom.filename.to_s
+      div style="width:304px; border:1px solid #CCCCCC; border-radius:4px; text-align:center; margin: 5px auto;"
+        - if @file.filecustom.previewable?
+          = image_tag try_show_preview(@file.filecustom, [300, 300]), class:"w-100"
+        - else
+          = image_tag try_show_image(@file.filecustom, "300x400",@file.filecustom.filename.extension_without_delimiter), class:"w-100"
+    - else
+      div.font-italic Файл еще не был добавлен
+    div.custom-file style="margin-top:10px; margin-bottom:10px"
+      = f.file_field :filecustom, class: "custom-file-input", id: "customFile", accept: "*/*"
+      = f.label :Выберите_файл, for: "customFile", class: "custom-file-label", id: "fileLabel"
+    div.form-group
+      = f.submit value: "Обновить", class: "btn btn-outline-primary", data: {disable_with: "Сохранение"}

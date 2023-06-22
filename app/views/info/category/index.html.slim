@@ -1,0 +1,120 @@
+
+div.row.justify-content-center
+  div.col style="max-width:400px"
+    div class="list-group list-group-root well"
+      == render partial: '/info/category/show', collection: @categories, as: :category, cached: true, locals:{"@category_selected": @category, "@subcategories":@subcategories}
+      /== render partial: '/info/category/show', collection: @categories, as: :category, cached: true, locals:{"@category_selected": @category}
+
+      - if current_user.admin?
+        br
+        br
+        div.list-group-item.text-center
+          button.btn.btn-outline-secondary data-toggle="modal" data-target="#exampleModal" data-action="add_category" Добавить категорию
+
+  /div.col-3
+    'Amount:
+    '#{@categories.size}:#{@subcategories.size}
+    == render partial: '/info/subcategory/show', collection: @subcategories, as: :subcategory, cached: true, locals:{"@category_selected": @category}
+
+    - if current_user.admin?
+      br
+      br
+      div
+        button.btn.btn-outline-secondary data-toggle="modal" data-target="#exampleModal" data-action="add_subcategory" Добавить подкатегорию
+
+  == render "info/modal"
+
+    /div.nav.flex-column.nav-pills.sticky-top.rounded-lg.border style="top:5em" role="tablist" aria-orientation="vertical"
+      /= link_to "Документы", info_docs_path, class: "nav-link #{'active' if action_name == 'docs'}"
+      /= link_to "Помощь", info_help_path, class: "nav-link #{'active' if action_name == 'help'}"
+  /div.col-3
+    /== yield
+
+css:
+
+  .just-padding {
+    padding: 15px;
+  }
+
+  .list-group.list-group-root {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .list-group.list-group-root .list-group {
+    margin-bottom: 0;
+  }
+
+      .list-group.list-group-root .list-group-item {
+    /* border-radius: 0;
+    border-width: 1px 0 0 0; */
+  }
+
+      .list-group.list-group-root > .list-group-item:first-child {
+    /* border-top-width: 0; */
+  }
+
+      .list-group.list-group-root > .list-group > .list-group-item {
+    margin-left: 50px;
+  }
+
+      .list-group.list-group-root > .list-group > .list-group > .list-group-item {
+        margin-left: 75px;
+  }
+
+  .alinkwhite {
+    color: white
+  }
+
+  .alinkwhite:hover{
+    color: white
+  }
+
+  .list-group-item.active {
+    color: #404143;
+    background-color: #404143;
+    border-color: #9ca0a4;
+  }
+
+
+  .list-group-item {
+    background-color: #fbfcfd;
+  }
+
+
+javascript:
+
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        $event = $(event.relatedTarget).attr('data-action');
+        modal_clear();
+        modal_loading_show();
+        switch ($event) {
+            case "add_category":
+                $.get(
+                    "/info/category/add",
+                    {format: "js"}
+                );
+                break;
+            case "add_subcategory":
+                $.get(
+                    "/info/subcategory/add",
+                    {format: "js", cid:#{@category_active}}
+                );
+                break;
+            case "edit_category":
+                $objId = $(event.relatedTarget).attr('data-id');
+                $.get(
+                    "/info/category/edit",
+                    {format: "js", id: $objId}
+                );
+                break;
+            case "edit_subcategory":
+                $objID = $(event.relatedTarget).attr('data-id');
+                $objCID = $(event.relatedTarget).attr('data-cid');
+                $.get(
+                    "/info/subcategory/edit",
+                    {format: "js", id: $objID, cid: $objCID}
+                );
+                break;
+        }
+    });

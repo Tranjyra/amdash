@@ -1,0 +1,74 @@
+div.row
+  div.col-sm-4
+  div.col-md
+
+div.row
+  div.col-sm-4
+    div.sticky-top style="top:5em; padding: 0 0 0 0"
+      //- if current_user.id== 19
+      div.card.rounded-lg
+        div.d-flex.bd-highlight
+          div.card-header.flex-md-fill.bd-highlight.text-center
+            = link_to "Мои работы", "/works", class: "ml-auto card-link"
+          div.card-header.flex-md-fill.bd-highlight.text-center
+            span style="text-decoration:overline" Все работы
+      br
+      div.card.sticky-top.rounded-lg style="top:5em; padding: 0 0 20px 0"
+        div.card-header.d-flex
+          span Поиск
+          //= link_to "Сбросить фильтры", root_path, class: "ml-auto card-link"
+          = link_to(image_tag("icon_filter_2.png", class: 'image-responsive ml-auto card-link', style:'width:24px'), "/stores", :title =>"Сбросить фильтры", class: "ml-auto card-link")
+        div.card-body
+          = form_with(url: "/stores", method: :GET, local: true) do |f|
+            div.form-group.card-text
+              = f.text_field :name, class: "form-control", placeholder: "Название магазина", value: "#{params[:name] if params[:name]}", oninput: "search_store(this.value)"
+              br
+              = f.select :s_stat, options_for_select(status_select, "#{params[:s_stat] ? params[:s_stat] : ''}"), {}, {class: "form-control"}
+              br
+              = f.select :region, options_for_select(region_select, "#{params[:region] ? params[:region] : ''}"), {}, {class: "form-control"}
+              br
+              = f.select :user_id, options_for_select(job_select, "#{params[:user_id] ? params[:user_id] : ''}"), {}, {class: "form-control"}
+              br
+              div.input-group
+                = f.select :job_status_id, options_for_select(select_options_job_status, (params[:job_status_id] ? params[:job_status_id] : 0)), {}, {class: "form-control"}
+                = f.select :job_type_id, options_for_select(select_options_job_type, (params[:job_type_id] ? params[:job_type_id] : 0)), {}, {class: "form-control"}
+              br
+              = f.submit value: "Показать", class: "btn btn-outline-primary", style: "width:100%;margin:auto" , data: {disable_with: "Поиск"}
+  div.col-md data-target="stores-index-wrapper"
+
+
+    == render partial: 'store', collection: @stores, cached: true
+
+    - if @pagy.count< 1
+      div.text-center
+        ' По указанным критериям поиска работы не найдены.
+        br
+          ' Попробуйте изменить запрос...
+        br
+    -if @pagy.pages>1
+      == pagy_bootstrap_nav(@pagy)
+    div style="text-align:center"
+      div style="padding-bottom:20px"
+        b
+          'Найдено магазинов:
+        b
+          ==@pagy.count
+        - if !@stores_filter_status.empty?
+          '  (#{@stores_filter_status.downcase})
+
+
+
+javascript:
+  $(function () {
+     $('#searchByName').on('input', function (event) {
+         var href = $('#submitSearch').attr('href');
+         href = href.replace(new RegExp("name=[^&]{0,}"), "name=" + event.target.value);
+         $('#submitSearch').attr('href', href);
+     }).keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13'){
+            var url = $('#submitSearch').attr('href');
+            document.location = url
+        }
+     });
+  });

@@ -1,0 +1,3 @@
+# add env lines to this file, then rename to application.yml and run server
+am_dash_host: "localhost:3000"
+email_login: "user@example.com"

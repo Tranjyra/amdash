@@ -1,0 +1,30 @@
+div.row
+  div.col-sm-4
+    div.card.rounded-lg.sticky-top style="top:5em; padding: 0 0 20px 0"
+      div.card-header.d-flex
+        span.font-weight-bold
+          = @user.name
+        span.left-flex
+          = @user.user_role.role
+      div.card-body
+        p.card-text
+          span.font-weight-bold
+            ' Email:
+          span = @user.email
+        p.card-text
+          span.font-weight-bold
+            ' Кол-во работ:
+          span = @user.jobs.count
+        = link_to "Настройка", admin_index_path, class: "card-link" if current_user.admin? && current_user.id == @user.id
+        = link_to "Отчеты", reports_path, class: "card-link" if current_user.id == @user.id
+  div.col-md
+    - @user.jobs.each do |job|
+      - color = type_color(job.job_type.name)
+      div class="card card-index rounded-lg border border-#{ color }"
+        div.card-header
+          span class="font-weight-bold"
+            = link_to "#{job.job_type.name} от #{human_date(job.end_date ? job.end_date : job.start_date)} в #{job.store.name}", job_path(job), class:"stretched-link text-#{ color } without-line"
+        div.card-body
+          p.card-text
+            = job.status.name
+      br

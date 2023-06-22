@@ -1,0 +1,7 @@
+div.patch-panel data-panel-id="#{patch_panel.id}" data-job-id="#{@job.id}"
+  div.patch-panel.border-dark.rounded-lg.border
+    - patch_panel.ports.all.each do |port|
+      == render partial: 'ports/port', locals: { port: port }
+  div.d-flex.ml-auto style="padding: 8px 0 0 0"
+    = link_to "Удалить", job_patch_panel_path(@job, patch_panel), method: :delete, class: "btn btn-outline-danger", remote: true, data: {confirm: "Вы уверены что хотите удалить патч-панель?"} if current_user.admin? || (@job.user.id == current_user.id && @job.status.id.in?([2,5]))
+br data-panel-id="#{patch_panel.id}" data-job-id="#{@job.id}"

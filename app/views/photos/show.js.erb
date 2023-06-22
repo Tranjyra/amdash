@@ -1,0 +1,4 @@
+$('#photoModalBody').html(`<%= render 'show_partial' %>`)
+$('#photoTitleModal').html(`<%="#{@photo.zone.name} #{@photo.eq.name} #{@photo.comment}".capitalize %>&nbsp;
+                            <%= fa_icon "check", style: "color: green" if @photo.checked %>`);
+$('#modalPhoto').modal('show');

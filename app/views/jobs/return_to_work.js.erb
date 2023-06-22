@@ -1,0 +1,5 @@
+$('.job-card').replaceWith(`<%= render partial: "job_card", locals: {job: @job} %>`);
+$modal = $("#returnToWorkModal");
+if ($modal.length > 0){
+    $modal.modal('hide');
+}

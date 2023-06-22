@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  job_id: 1
+  name: MyString
+  desc: MyString
+  status: 1
+  start_time: 2021-03-21 19:56:13
+  end_time: 2021-03-21 19:56:13
+  elapsed_time: 1
+  created_by: 1
+  updated_by: 1
+
+two:
+  job_id: 1
+  name: MyString
+  desc: MyString
+  status: 1
+  start_time: 2021-03-21 19:56:13
+  end_time: 2021-03-21 19:56:13
+  elapsed_time: 1
+  created_by: 1
+  updated_by: 1

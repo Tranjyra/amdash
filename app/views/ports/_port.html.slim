@@ -1,0 +1,21 @@
+div.port data-port="#{port.port_number}" data-used="#{port.used}" data-port-id="#{port.id}"
+  div style="position:relative;  text-align: center;"
+    - if port.used
+      = image_tag 'eth_on.svg', class: 'port-img'
+    - elsif !port.empty
+      = image_tag 'eth_empty.svg', class: 'port-img'
+    - else
+      = image_tag 'eth_off.svg', class: 'port-img'
+
+    - if !port.empty
+      div.port-num-label.port-num-label-unused
+        div.port-num-label-text =port.port_number
+    - else
+      div.port-num-label.port-num-label-used
+        div.port-num-label-text =port.port_number
+
+  - if port.short_description && port.short_description.length > 1
+    div style="padding: 0 8px 0 8px"
+      p.border.border-dark.rounded-lg.text-center style="margin-bottom: 0.5rem" = port.short_description
+  //div style="padding: 0 8px 0 8px"
+    //p.border.border-dark.rounded-lg.text-center style="margin-bottom: 0.5rem" = (port.short_description && (port.short_description.length > 1)) ? port.short_description  : port.port_number

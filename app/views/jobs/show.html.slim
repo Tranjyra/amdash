@@ -1,0 +1,105 @@
+== render 'modal_photo'
+== render 'patch_panels/modal'
+div.row
+  div.col-4
+    == render partial: "job_card", locals: {job: @job}
+  div.col style="max-height: calc(100vh - 6em); overflow-y: auto;"
+    == render 'tab_menu_show'
+    div.tab-content id="myTabContent"
+      div class="tab-pane fade show active" id="photos" role="tabpanel" aria-labelledby="photos-tab"
+        div.panel-group id="accordion" role="tablist" aria-multiselectable="true"
+          div.panel.panel-default
+            - @allcnt=0
+            - Staff.where('staff_type=1').each do |staff|
+              - @pcollection =@job.photos.filter_zone_id(staff.id).ordercomment
+              - @allcnt=@allcnt+@pcollection.count
+              - if @pcollection.count> 0
+                div style="margin:2px 3px 20px 3px"
+                  span style="margin:5px 1px 0px 5px"
+                    '#{staff.name}:
+                  hr
+                  div.card-columns id="photoCardColumns"
+                    == render partial: 'photos/photo', collection: @pcollection, cached: true
+                  hr
+            - if @allcnt < 1
+              span.m-2
+                i
+                  'Фотографии и отчеты не добавлены
+      /div.card-columns id="photoCardColumns"
+          == render partial: 'photos/photo', collection: @job.photos, cached: true
+      div class="tab-pane fade show" id="patch-panel" role="tabpanel" aria-labelledby="patch-panel-tab"
+        - @job.patch_panels.all.each do |patch_panel|
+          == render partial: 'patch_panels/patch_panel', locals: {"@job": @job, patch_panel: patch_panel}
+      div class="tab-pane fade show" id="registrator-panel" role="tabpanel" aria-labelledby="registrator-panel-tab"
+        div.d-flex id="registrators-wrapper"
+          - @job.registrators.all.each do |reg|
+            == render partial: 'registrators/registrator', locals: {registrator: reg}
+
+
+css:
+  .card-columns > .card {
+    width: 100% !important;
+    max-width: 200px !important;
+    display: inline-block !important;
+    margin: 5px;
+  }
+
+  .card-columns {
+    -webkit-column-count: unset !important;
+    -moz-column-count: unset !important;
+    column-count: unset !important;
+  }
+
+
+
+
+
+
+
+
+
+  .panel-heading {
+    padding: 0;
+    border: 0;
+  }
+
+  .panel-title > a, .panel-title > a:active {
+    display: block;
+    padding: 15px;
+    color: #555;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    word-spacing: 3px;
+    text-decoration: none;
+  }
+
+  .panel-heading a:before {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
+    float: right;
+    transition: all 0.5s;
+  }
+
+  .panel-heading.active a:before {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+
+
+javascript:
+
+    $('.panel-collapse').on('show.bs.collapse', function () {
+        $(this).siblings('.panel-heading').addClass('active');
+    });
+
+    $('.panel-collapse').on('hide.bs.collapse', function () {
+        $(this).siblings('.panel-heading').removeClass('active');
+    });
+
+
+    function showdiv(target){
+        $( target ).toggle();
+    }

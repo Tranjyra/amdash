@@ -1,0 +1,28 @@
+div.w-50
+  = form_with(model: @patch_panel, url: [@store, @job, @patch_panel]) do |f|
+    = f.hidden_field :job_id, value: @job.id
+    = f.fields_for :port do |port|
+      -24.times do |i|
+        h3 Порт номер #{i + 1}
+        = port.hidden_field :port_number, value: i + 1
+        div.form-group
+          = port.label :Описание
+          = port.text_field :short_description, class: "form-control", placeholder: "Введите описание порта"
+        div.form-group
+          = f.label :Зона
+          = f.select :zone_id, options_for_select(select_zones), {}, { class: "form-control", id: 'zoneSelect' }
+        div.form-group
+          = f.label :Оборудование
+          = f.select :eq_id, options_for_select(select_eq(select_zones.first[1])), {}, { class: "form-control", id: 'eqSelect' }
+        hr.my-2
+
+javascript:
+  $('#zoneSelect').change(function (e) {
+      var zone_id = e.target.selectedOptions[0].value;
+      $.get(
+          '/staff',  
+          {
+              format: 'js',
+              zone_id: zone_id
+          });
+  });

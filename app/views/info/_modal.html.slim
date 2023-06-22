@@ -1,0 +1,17 @@
+div class="modal" id="exampleModal" tabindex="-1" role="dialog"
+  div class="modal-dialog" role="document"
+    div class="modal-content"
+      div class="modal-header"
+        h5 class="modal-title" data-target="modal-title"
+        div id="loading_image_modal" style="text-align:center; width:100%; margin-top: 40px; margin-bottom:40px; "
+          span.fontsize17 Подгружаем..
+          br
+          =image_tag("loader.gif", style:'width:50px;  margin-left: auto !important')
+        div style="float:right"
+          div class="btnModalDelete" style="width:30px; display: inline-block"
+          button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Закрыть"
+            span aria-hidden="true" &times;
+      div class="modal-body" data-target="modal-body"
+
+
+

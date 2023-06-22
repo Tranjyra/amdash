@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Автоматизация</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= action_cable_meta_tag %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= favicon_link_tag asset_path('GJ.ico') %>
+
+</head>
+
+<body style="background-image: <% image_url('menu/bck1.png')%>;">
+<% if logined? %>
+  <!-- < %= #audio_tag("mario_coin_sound.mp3", id: "notifySound") %> -->
+  <!-- < %= #audio_tag("mario_coin_sound2.mp3", id: "notifySound") %> -->
+  <!-- <button id="audioPlay" class="d-none"></button> -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <%= link_to "Автоматизация", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+      </ul>
+
+      <div>
+        <%= link_to "Ресурсы", info_index_path, class: "nav-link text-white pl-0" %>
+      </div>
+
+      <div class="dropdown">
+        <%= link_to("#", class: "nav-link text-white dropdown-toggle", id: "dropdownMenuLink", "data-toggle": "dropdown", "aria-haspopup": true, "aria-expanded": false) do %>
+        <span>
+            Сообщения
+              <span id="event-badge" class="badge badge-danger <%= 'd-none' if current_user.events.unreaded.size < 1 %>"><%= current_user.events.unreaded.size %></span>
+          </span>
+<% end %>
+<div style="max-height: 50vh; overflow-y: auto; min-width: 30em" class="dropdown-menu dropdown-menu-right event-menu" aria-labelledby="dropdownMenuLink" >
+
+
+  <div id="no_events_message" style="<%= 'display: none' if current_user.events.unreaded.size > 0 %>">
+    <div class="dropdown-divider"></div>
+    <div class="dropdown-item disabled" style="text-align: center">
+      <span>Нет новых уведомлений</span>
+    </div>
+  </div>
+
+
+  <div id="readall_div_top" style="padding-top: 10px; padding-bottom: 10px; <%= 'display: none' if current_user.events.unreaded.size < 4 %>" >
+    <div class="dropdown-item" style="text-align: center">
+      <%=link_to image_tag("eye_open.png", class: 'image-responsive ml-auto card-link', style:'width:24px; vertical-align:bottom; ')+"Отметить всё прочитанным", events_readall_path, method: :put, remote: true, class: "dropdown-item text-primary", style:"color:#212529 !important;" %>
+    </div>
+
+  </div>
+  <div id="events_list">
+    <% current_user.events.unreaded.order(created_at: :desc).each do |event| %>
+      <div class="dropdown-item event-item" id="event-<%= event.id %>">
+        <%= render partial: "events/event_#{class_to_s event.subject}_#{event.event_type}", locals: {event: event, context: "dropdown"} %>
+      </div>
+    <% end %>
+  </div>
+  <div class="dropdown-divider"></div>
+  <div class="dropdown-item" style="text-align: center">
+    <%= link_to "Показать всё", user_events_path(current_user), class: "dropdown-item text-primary" %>
+  </div>
+  <div class="dropdown-divider"></div>
+  <div id="readall_div_bottom" style=" <%= 'display: none' if current_user.events.unreaded.size < 1 %>" >
+    <div class="dropdown-item" style="text-align: center">
+      <%=link_to "Отметить всё прочитанным", events_readall_path, method: :put, remote: true, class: "dropdown-item text-primary", style:"color:#212529 !important;"  %>
+    </div>
+    <div class="dropdown-divider"></div>
+  </div>
+</div>
+
+</div>
+
+<div class="nav-item dropdown">
+  <!--CLASS to show ARROW-down: dropdown-toggle-->
+  <a class="nav-link text-white " href="#" id="navbarUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <%= current_user.name_short %>
+  </a>
+  <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarUser">
+    <%= link_to "Профиль", user_path(current_user), class: "dropdown-item" %>
+    <!-- <div class="dropdown-divider"></div> -->
+    <%= link_to "Выход", login_path, method: :delete, class: "dropdown-item" %>
+  </div>
+</div>
+
+
+</div>
+</nav>
+
+<% end %>
+<div id="container" class="container-fluid" style="max-width: 95vw">
+  <% flash.each do |key, value| %>
+    <div class="alert alert-<%= key%>"><%= value %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% end %>
+  <br>
+  <%= content_for?(:admin) ? yield(:admin) : yield %>
+</div>
+</body>
+</html>

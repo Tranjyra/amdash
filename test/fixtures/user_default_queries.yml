@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  query_type: MyString
+  query_data: MyString
+  user_id: 1
+
+two:
+  query_type: MyString
+  query_data: MyString
+  user_id: 1

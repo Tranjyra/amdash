@@ -1,0 +1,29 @@
+div.border.rounded-lg.border-dark id="#{registrator.id}" style="width: max-content; padding: 8px; margin: 8px;"
+  p = "Модель: " + registrator.model.name
+  p = registrator.cum_count.to_s + " Камер"
+  p = "IP: " + registrator.ip_address
+  - if current_user.admin?
+    // && current_user.id==19
+    - passtemp = registrator.ip_address.split(".")[3]
+    - passtemp = (passtemp ? passtemp : '20')
+    p.verticalmiddle
+      ' Pass:
+      span id="pass#{registrator.id}" = "rozn@" +(@job.store.baseidd.to_i).to_s + "06" + passtemp.to_s
+      //input class="btnpasscopy" type="button" title="копировать" data-clipboard-action="copy" data-clipboard-target="pass#{registrator.id}" data-mess-containerID="passMess#{registrator.id}" id="btncopy#{registrator.id}"
+        //button class="btn btn-sm btnpasscopy verticalmiddle fontsize11" style=" margin-left:10px; padding:0; border:none; outline:none" type="button" title="копировать" data-clipboard-action="copy" data-clipboard-target="pass#{registrator.id}" data-mess-containerID="passMess#{registrator.id}" id="btncopy#{registrator.id}" копировать
+  div.btn-group
+    = link_to "Web интерфейс", "http://#{registrator.ip_address}/", target: :_blank, class: 'btn btn-outline-primary border-dark btn-sm', role: 'button'
+    - if current_user.admin? || (current_user.id == registrator.job.user.id && registrator.job.status.id.in?([2,5]))
+      = link_to "Удалить", job_registrator_path(registrator.job.id, registrator.id), :method => :delete, :remote => true, data: {confirm: "Вы уверены что хотите удалить видеорегистратор?"}, class: 'btn btn-outline-danger btn-sm btn-r border-dark ml-auto', role: 'button'
+
+
+css:
+  .btn-l {
+    border-right: none;
+  }
+
+  .btn-r {
+    border-left: none;
+  }
+
+//script src="/app/assets/javascripts/clipboardjs/clipboard.min.js"

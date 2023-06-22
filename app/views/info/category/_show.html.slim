@@ -1,0 +1,32 @@
+- @active_cat= (@category_selected!=nil && @category_selected.id==category.id)
+- @class_add=(@active_cat ? 'active' : '')
+- @class_add2=(@active_cat ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right')
+
+div class="list-group-item d-flex justify-content-between align-items-center #{@class_add}"
+  /i class="glyphicon #{@class_add2}"
+  div
+    -if category.name.empty?
+      == category.name="<No name>"
+
+    -if @active_cat
+      = link_to category.name, info_category_path(category.id), style:"font-weight:bold", class:"alinkwhite"
+    -else
+      = link_to category.name, info_category_path(category.id), style:"font-weight:normal"
+
+
+    /= link_to " x",  info_category_path(category.id), method: :delete, data: {confirm: "Удалить категорию?"} if current_user.admin?
+    = link_to image_tag("menu/edit.png", style:'width:12px; margin-left:5px; vertical-align:middle; '), info_category_path(category.id), title:"Редактировать",
+            "data-toggle":"modal", "data-target":"#exampleModal", "data-action":"edit_category","data-id":category.id  if current_user.admin?
+    /= link_to image_tag("menu/edit.png", style: 'width:16px; vertical-align:middle; '), info_category_edit_path(:id=>category.id), title: "Редактировать" if current_user.admin?
+  - @subcnt = Infodb.where(category_id:category.id,base_type:3).count
+  - if @subcnt > 0
+    span class="badge badge-primary badge-pill"
+      = @subcnt
+
+-if @active_cat
+  div class="list-group" style="padding-bottom:10px"
+    == render partial: '/info/subcategory/show', collection: @subcategories, as: :subcategory, cached: true, locals:{"@category_selected": @category}
+
+    - if current_user.admin?
+      div.list-group-item.text-right
+        button.btn.btn-outline-secondary.bold data-toggle="modal" data-target="#exampleModal" data-action="add_subcategory" +

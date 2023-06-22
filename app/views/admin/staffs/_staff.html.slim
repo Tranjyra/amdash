@@ -1,0 +1,9 @@
+div.card id="staff-#{staff.id}" class="#{"border-warning" if staff.required}"
+  div.card-header.d-flex
+    span.font-weight-bold = staff.name
+    dif.ml-auto
+      span.ml-auto = staff.staff_type.capitalize
+      span.priv-icon == render partial: "layouts/letter_icon", locals: {letter: "R"} if staff.required
+      span.priv-icon == render partial: "layouts/letter_icon", locals: {letter: "S"} if staff.supervised
+  div.card-body
+    = link_to "Изменить", "#exampleModal", class: "card-link", "data-toggle":"modal", "data-target":"#exampleModal", "data-action": "edit", "data-staff-id": staff.id

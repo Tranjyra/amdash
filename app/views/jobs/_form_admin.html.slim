@@ -1,0 +1,37 @@
+= form_for(@job) do |f|
+  = f.hidden_field :accepted, value: :true
+  div.form-group
+    = f.label :Магазин
+    input type="text" class="form-control" value="#{@store.name}" readonly="true"
+    = f.hidden_field :store_code, value: @store.code
+  div.form-group
+    = f.label :Дата_начала, for:"start_date", class:"d-block"
+    = f.date_field :start_date, class: "form-control", id:"start_date", value: @job.start_date.nil? ? Time.zone.now.strftime("%Y-%m-%d") : @job.start_date.strftime("%Y-%m-%d")
+  div.form-group
+    = f.label :Дата_окончания, for: "end_date", class: "d-block"
+    = f.date_field :end_date, class: "form-control", id: "end_date", value: @job.end_date.nil? ? Time.zone.now.strftime("%Y-%m-%d") : @job.end_date.strftime("%Y-%m-%d")
+  div.form-group
+    = f.label :Исполнитель
+    -if defined? @job.user.id
+      = f.select :user_id, options_for_select(user_select,@job.user.id), {}, {class: "form-control"}
+    -else
+      = f.select :user_id, options_for_select(user_select,current_user.id), {}, {class: "form-control"}
+  div.form-group
+    = f.label :Тип
+    = f.select :job_type_id, options_for_select(select_options_job_type, @job.job_type_id), {}, {class: "form-control", onchange:"leaveChange()"}
+  div.form-group class="hidden" id="div_description"
+    = f.label :Описание_выезда
+    textarea class="form-control" rows="5" name="job[description]" id="description"
+      = @job.description
+    //= text_area_tag '', nil, size: "25x1", required: true
+  div.form-group
+    = f.label :Статус
+    = f.select :status_id, options_for_select(select_options_job_status, @job.status_id), {}, {class: "form-control"}
+  div.form-check
+    = f.check_box :historical, class: "form-check-input", checked: false
+    = f.label :Исторический_выезд?
+  div.form-check
+    = f.check_box :accepted, class: "form-check-input", checked: @job.accepted
+    = f.label :Работа_подтверждена?
+  = f.submit value: "Сохранить", class: "btn btn-outline-primary"
+  //= link_to 'Back', 'javascript:history.back()'

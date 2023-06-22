@@ -1,0 +1,21 @@
+/! h3 Главная страница админа
+/!h3 ТУТ БУДУТ КРАСИВЫЕ ГРАФИКИ
+
+h4.text-center Панель администратора
+hr
+-if current_user.id==19
+ button.btn.btn-primary onclick="syncStores()" Обновить список магазинов
+/-if current_user.id==19
+  = button_to "Обновить список магазинов", '/admin/index/1/task1', method: :get, class: "card-link", data: {confirm: "Запустить процесс синхронизации списка магазинов с сервером Песок?\n\nЭтот процесс займет некоторое время, сайт am-dashboard будет временно недоступен. Продолжить?"} if (current_user.admin?)
+
+
+
+
+javascript:
+
+  function syncStores() {
+      if(!confirm('Запустить процесс синхронизации списка магазинов с сервером Песок?\n\nЭтот процесс займет некоторое время, сайт am-dashboard будет временно недоступен.')) return;
+      /* alert('В разработке');  */
+  }
+
+

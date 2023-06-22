@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  name: MyString
+  baseidd: MyString
+  region: MyString
+  idd: MyString
+  time_start: MyString
+  time_end: MyString
+  opening_date: MyString
+  zone: MyString
+  s_stat: MyString
+  phone: MyString
+  phoneext: MyString
+  email: MyString
+  addr: MyString
+
+two:
+  code: MyString
+  name: MyString
+  baseidd: MyString
+  region: MyString
+  idd: MyString
+  time_start: MyString
+  time_end: MyString
+  opening_date: MyString
+  zone: MyString
+  s_stat: MyString
+  phone: MyString
+  phoneext: MyString
+  email: MyString
+  addr: MyString

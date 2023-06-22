@@ -1,0 +1,15 @@
+<div class="container">
+  <% @names.each do |name| %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="text-center"><strong><%= name[:anotation] %></strong></h5>
+        <hr>
+        <%= image_tag attachments.inline[name[:att_name]].url, class: "img-fluid mx-auto", width: "600", alt: name[:anotation] %>
+        <hr>
+        <%= link_to "Подтвердить",
+                    url_for(action: 'check', controller: 'photos', only_path: false, id: name[:id], photo: {checked: true}),
+                    class: "text-center mx-auto btn btn-success" %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,9 @@
+div.d-flex
+  = image_tag url_for(try_resize(@photo.image, '768x768')), class: "card-img-middle m-auto"
+hr.my-4
+div.d-flex
+  div.buttons.m-auto
+    =' link_to "Оригинал", url_for(@photo.image), target: '_blank', class: "btn btn-outline-secondary"
+    - if current_user.admin? || (@photo.job.user.id == current_user.id && @photo.job.status.id.in?([2,5]))
+      '|
+      =' link_to "Удалить", job_photo_path(@job, @photo), method: :delete, class: "btn btn-outline-danger ml-auto", remote: true, data: {confirm: "Вы уверены что хотите удалить #{@photo.comment}?"}

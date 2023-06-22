@@ -1,0 +1,77 @@
+// Place all the styles related to the patch_panels controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.patch-panel{
+  display: flex;
+  flex-wrap: wrap;
+  //width: 776px;
+  width: 915px;
+  //width: 1540px;
+}
+.port{
+  user-select: none;
+}
+
+.port-img{
+  height: 76px;
+  width: 76px;
+  padding: 0 6px 0 6px;
+}
+
+/*
+.port-num-label{
+  top:18px;
+  left :33%;
+  height: 22px;
+  width: 22px;
+  border:1px solid #000;
+  border-radius: 50%;
+  display: inline-block;
+  position:absolute;
+}
+
+.port-num-label-text{
+  font-size:14px;
+  position:absolute;
+  top:9px;
+  left:10px;
+  transform: translate(-50%, -50%);
+  font-weight:bold;
+}
+*/
+
+.port-num-label-unused{
+  background-color: #bbb;
+  //#e0e0e2
+}
+
+.port-num-label-used{
+  background-color: #fff;
+}
+
+
+
+
+.port-num-label {
+  top: 47px;
+  left: 6px;
+  height: 24px;
+  width: 24px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute;
+}
+
+
+
+.port-num-label-text{
+  font-size:14px;
+  position:absolute;
+  top:9px;
+  left:10px;
+  transform: translate(-52%, -50%);
+  font-weight:bold;
+}

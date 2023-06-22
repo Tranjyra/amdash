@@ -1,0 +1,11 @@
+li class="list-group-item d-flex justify-content-between align-items-center"
+  div.w-100
+    div style="float:left; width:96%; display:inline-block"
+      -if file.name.empty?
+        == file.name="<No file name>"
+      /= link_to file.name, info_file_path(file.id, :cid=>@category_selected.id,:sid=>@subcategory_selected.id)
+      = link_to file.name, info_file_path(file.id), title: "Открыть",
+              "data-toggle": "modal", "data-target": "#exampleModal", "data-action": "about_file", "data-id": file.id, "data-cid": @category_selected.id, "data-sid": @subcategory_selected.id
+    div style="float:right; width:4%; display:inline-block"
+      = link_to image_tag("menu/settings2.png", style: 'width:13px; vertical-align:middle; '), info_file_path(file.id), title: "Редактировать",
+              "data-toggle": "modal", "data-target": "#exampleModal", "data-action": "edit_file", "data-id": file.id, "data-cid": @category_selected.id, "data-sid": @subcategory_selected.id  if current_user.admin?

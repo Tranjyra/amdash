@@ -1,0 +1,18 @@
+div
+  = form_with do |f|
+    div.form-group
+      = f.label :Название_категории
+      = f.text_field :name, class: "form-control", placeholder: "Название", required: true
+    div.form-group
+      = f.label :Описание
+      = f.text_field :desc, class: "form-control", placeholder: "Описание"
+    div.form-group
+      //PARENT CATEGORY ID
+      = f.hidden_field :category_id, value: 1
+      //PARENT SUBcategory ID, 0 - это и есть subcategory
+      = f.hidden_field :subcategory_id, value: 0
+      //Flag: 1 = category, 2 = subcat, 3 - file
+      = f.hidden_field :base_type, value: 2
+
+      = f.hidden_field :created_by, value: current_user.id
+      = f.submit value: "Сохранить", class: "btn btn-outline-primary", data: {disable_with: "Сохранение"}

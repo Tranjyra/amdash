@@ -1,0 +1,96 @@
+div.card.d-flex.job-card style="max-width: 50vw;margin:auto"
+  div.card-header.rounded-lg
+    //' #{job.job_type.name} от #{human_date(job.start_date)} в
+    //#{human_date(job.end_date ? job.end_date : job.start_date)}
+    //' в #{job.store.name}
+    ' #{job.job_type.name}
+    ' #{job_date_str(job)}
+    //' в
+    // #{human_date(job.end_date ? job.end_date : job.start_date)}
+    ' в
+    //#{job.store.name}
+    span
+      = link_to "#{job.store.name}", store_path(job.store), class: "black without-line text-primary"
+  div.card-body
+    div.text-left.pr-2
+      'Статус:
+      b
+        '#{job.status.name}
+      -if !job.accepted && job.status.id==1
+        br
+        -if current_user.admin?
+          span.fontsize16.font-italic.blink
+            ' (ожидаем вашего подтверждения)
+        -else
+          span.fontsize16.font-italic
+            ' (ожидаем подтверждения администратора)
+      - if job.status.id==5
+        br
+        - if current_user.admin? && job.user_id != current_user.id
+          span.fontsize16.font-italic.blink
+            ' (ожидается ваше решение)
+        - else
+          span.fontsize16.font-italic.blink
+            ' (ожидаем рассмотрения работы администратором)
+
+    - if job.job_type.id==4
+      br
+      div.text-left.pr-2
+        'Описание:
+        textarea class="form-control" rows="5" readonly="true"
+          = @job.description
+
+
+    - if  !job.sn_inc.blank? && !job.sn_sys_id.blank? && job.sn_inc!='0' && job.sn_sys_id!='0'
+      br
+      div.text-left.pr-2
+        'SN:
+        = link_to job.sn_inc, Constants::SN_LINK+'/sc_req_item.do?sys_id=' +job.sn_sys_id, target: :_blank
+        '
+        = link_to image_tag("menu/delete.png", style: 'width:16px; vertical-align:middle; margin:0 0 3px 5px'), sn_inc_delete_link_job_path, method: :put, class: "card-link text-danger", data: {confirm: "Отвязать работу от заявки в SN? При этом заявка в SN удалена не будет."} if current_user.admin?
+
+    br
+    div.text-left.pr-2
+      'Ответственный:
+      = link_to job.user.name, user_path(job.user)
+
+
+
+    br
+    = link_to "Удалить", job_path(job), method: :delete, class: "card-link text-danger", data: {confirm: "Вы уверены что хотите удалить работу?"} if (job.user.id == current_user.id && !job.accepted) || current_user.admin?
+    = link_to "Изменить", edit_job_path(job), class: "card-link" if (job.user.id == current_user.id && !job.accepted) || current_user.admin?
+    /= link_to "Отклонить", job_path(job, job: {accepted: false}), method: :put, class: "card-link" if current_user.admin? && !job.accepted && job.status_id != 3
+    = link_to "Подтвердить",  accept_job_path(job, job: { status_id: 2, accepted: true}), method: :put, class: "card-link underline", data: {confirm: "Подтвердить проведение работы в этом магазине?"} if current_user.admin? && !job.accepted && job.status_id != 3
+    /= link_to "Завершить работу", before_done_send_to_admin_job_path(job, job: {status_id: 5}), method: :put, class: "card-link", data: {confirm: "Отправить работу на рассмотрение администратору?"}  if (job.user_id == current_user.id && job.accepted) && (job.status.id.in?([1,2]))
+    /= link_to "Завершить работу2222", before_done_send_to_admin_job_path(job, job: {status_id: 5}, show_modal: true), method: :put, remote: true, class: "card-link" if (job.user_id == current_user.id && job.accepted) && (job.status.id.in?([1, 2])) && current_user.id==19
+    = link_to "Завершить работу", before_done_send_to_admin_job_path(job, job: {status_id: 5}, show_modal: true), method: :put, remote: true, class: "card-link" if (job.user_id == current_user.id && job.accepted) && (job.status.id.in?([1, 2]))
+    = link_to "Завершить принудительно", done_job_path(job, job: {status_id: 3}), method: :put, class: "card-link", data: {confirm: "Работа еще не была отправлена Вам на рассмотрение, все равно завершить ее с одобрением?"} if (current_user.admin? && job.accepted) && (job.status.id.in?([1,2])) && (job.user_id != current_user.id)
+    = link_to "Завершить принудительно", done_job_path(job, job: {status_id: 3}), method: :put, class: "card-link", data: {confirm: "Поскольку вы администратор, то этот шаг завершит работу без отправки ее на рассмотрение и сразу одобрит вашу работу. Продолжить?"} if (current_user.admin? && job.accepted) && (job.status.id.in?([1, 2])) && (job.user_id == current_user.id)
+    /= link_to "Одобрить", done_job_path(job, job: {status_id: 3}), method: :put, class: "card-link", data: {confirm: "Одобрить и завершить эту работу?"} if (current_user.admin? && job.accepted) && (job.status.id.==5)
+    = link_to "Одобрить", done_job_path(job, show_modal: true), method: :put, remote: true, class: "card-link" if (current_user.admin? && job.accepted) && (job.status.id.== 5)
+    = link_to "Вернуть в работу", return_to_work_job_path(job, show_modal: true), method: :put, remote: true, class: "card-link" if current_user.admin? && job.status.id == 5
+    /- if current_user.id.in?([19])
+      /= link_to "Создать заявку в SN", sn_inc_create_job_path(job, job: {status_id: 3}), method: :put, class: "card-link", data: {confirm: "Создать заявку в ServiceNow?"}
+      /{status_id: (current_user.admin? ? 3 : 5)}
+    - if current_user.id.in?([19])
+      = link_to "Создать таск в SN", sn_task_create_job_path(job, job: {status_id: 3}), method: :put, class: "card-link", data: {confirm: "Создать таск к прикрепленной заявке в ServiceNow?"}
+
+    - if current_user.id.in?([19])
+      = link_to "Подсчет islatest", calculate_latest_job_in_store_all_job_path, method: :put, class: "card-link"
+    p.card-text
+      br
+      - if job.accepted && job.status.id.in?([2,5])
+        == render 'add_item_button' if current_user.admin? || current_user.id == job.user.id
+      - else
+        - if job.status.id==1
+          table
+            tr
+              td.pr-3
+                = image_tag("menu/info.png", style: 'width:16px; vertical-align:middle;')
+              td
+                span.fontsize14.font-italic
+                  'Добавление фотографий будет доступно
+                  br
+                  'после подтвержения проведения работы администратором
+
+

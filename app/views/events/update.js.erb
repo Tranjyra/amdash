@@ -1,0 +1,5 @@
+remove_event_from_dropdown(<%= @event.id %>, <%= current_user.events.unreaded.count %>);
+$indexCard = $('[id="event-card-<%= @event.id %>"][data-context="index"]');
+if ($indexCard.length > 0){
+    $indexCard.replaceWith(`<%= render partial: "event_#{class_to_s(@event.subject)}_#{@event.event_type}", locals: {event: @event, context: "index"} %>`);
+}

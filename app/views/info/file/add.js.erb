@@ -1,0 +1,5 @@
+$('div.btnModalDelete').html("");
+$('h5[data-target="modal-title"]').html("Добавить новый документ");
+$('div[data-target="modal-body"]').html(`<%= render partial: 'info/file/form_add',locals: {"@category": @category, "@subcategory": @subcategory} %>`)
+$("#loading_image_modal").css('display','none');
+//, locals: {"@docs": @docs}

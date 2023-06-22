@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  patch_panel_id: 1
+  port_number: 1
+  zone_id: 1
+  eq_id: 1
+  comment: MyString
+
+two:
+  patch_panel_id: 1
+  port_number: 1
+  zone_id: 1
+  eq_id: 1
+  comment: MyString

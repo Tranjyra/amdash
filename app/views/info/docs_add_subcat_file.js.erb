@@ -1,0 +1,2 @@
+$('h5[data-target="modal-title"]').html("Добавить новый документ");
+$('div[data-target="modal-body"]').html(`<%= render partial: 'docs_form_subcat_file', locals: {"@docs": @docs, "@subcategory_current": @subcategory_current, } %>`)

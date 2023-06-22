@@ -1,0 +1,113 @@
+div
+  -if @file.desc?
+    div
+      = simple_format(@file.desc)
+
+  div style="margin-top:5px; margin-bottom:5px"
+  - if @file.filecustom && @file.filecustom.attached?
+    -@fullpath=rails_blob_url(@file.filecustom)
+    div.enlargeImageDIV style="width:304px; border:1px solid #CCCCCC; border-radius:4px; text-align:center; margin: 5px auto;"
+      - if @file.filecustom.previewable?
+        =link_to image_tag(try_show_preview(@file.filecustom,[300,300]), class:"w-100 enlargeImageInside"), @fullpath, target: '_blank'
+        /= image_tag try_show_preview(@file.filecustom,[300,300]), class:"w-100"
+        /br
+        /=rails_blob_url(@file.filecustom)
+        /=link_to 'Скопировать ссылку', @fullpath, target: '_blank', class: "btn btn-outline-secondary"
+      - else
+        =link_to image_tag(try_show_image(@file.filecustom,"300x300",@file.filecustom.filename.extension_without_delimiter), class:"w-100 enlargeImageInside"), @fullpath, target: '_blank'
+        /= image_tag try_show_image(@file.filecustom,"300x300",@file.filecustom.filename.extension_without_delimiter), class:"w-100"
+      div.font-italic.d-block.breakwrap
+        = @file.filecustom.filename.to_s
+    br
+    div style="margin-top:5px; margin-bottom:5px; max-width:200px; float:left;"
+      = link_to image_tag("menu/download.gif", style: 'width:20px; vertical-align:middle; margin-right:5px')+"Скачать файл", rails_blob_path(@file.filecustom, disposition: "attachment"), class: "btn btn-outline-secondary"
+    div style="margin-top:5px; margin-bottom:5px; max-width:50px; float:left;"
+      button.btn.btn-outline-secondary.frmabcopybtn id="frmabcopybtnid" data-clipboard-text="#{request.base_url}/info/subcategory/#{@subcategory.id}?cid=#{@category.id}&of=#{@file.id}" style="margin: 0 5px"  title="Скопировать ссылку на эту страницу"
+        =image_tag("menu/share.png", style: 'width:20px; vertical-align:middle;')
+        span id="frmabcopypopoverid" data-toggle="popover"  data-content="Disabled popover" data-trigger="focus"
+
+      /div.d-inline-block
+        = link_to image_tag("menu/edit.png", style: 'width:16px; vertical-align:middle; '), info_file_path(@file.id), title: "Редактировать",
+                "data-toggle": "modal", "data-target": "#exampleModalEdit", "data-action": "edit_file", "data-id": @file.id, "data-cid": @category.id, "data-sid": @subcategory.id  if current_user.admin?
+
+
+  - else
+    div.font-italic Файл еще не был добавлен
+
+    /= link_to(image_tag(@file.filecustom.preview(resize: "200x200")),  rails_blob_path(@file.filecustom, disposition: "attachment"))
+    br
+  - if @file.updated_at?
+
+    div.verticalmiddle style="margin-top:15px; margin-bottom:5px; max-width:400px; float:right;"
+      = image_tag("menu/calendar.png", style: 'width:20px; vertical-align:middle; margin-right:5px')
+      'Обновлено:
+      /#{@file.updated_at.strftime("%d-%B-%Y")}
+      span.font-italic
+        == Russian::strftime(@file.updated_at, "%d %B %Y")+ ', ' + @name_updatedby
+        /I18n.l(@file.updated_at.to_time, :format => '%e %b %Y')
+
+  div id="frmabcopytextareadiv" style="margin-left:10px; display:none"
+    br
+    label.w-100 for="frmabcopytextarea" style="margin-top:10px" Ссылка на документ:
+    textarea.w-100 id="frmabcopytextarea" rows="2" cols="2"
+
+
+css:
+  .popover>.popover-body{
+    background-color: #0b2e13;
+    color: white;
+  }
+
+
+javascript:
+
+    //$('.popover-body').css('background-color', 'red');
+    //new ClipboardJS('#frmabcopybtn');
+
+
+    //form about clipboard
+    var frmaclipboard = new ClipboardJS('#frmabcopybtnid', {
+        container: document.getElementById('exampleModal')
+    });
+
+    $('#frmabcopypopoverid').on('shown.bs.popover', function () {
+        setTimeout(function () {
+            $('#frmabcopypopoverid').popover('hide');
+            $('#frmabcopybtnid').prop('disabled', false);
+        }, 3000);
+    });
+
+    frmaclipboard.on('success', function (e) { //success
+        //console.info('Action:', e.action);
+        //console.info('Text:', e.text);
+        //console.info('Trigger:', e.trigger);
+        $('#frmabcopypopoverid').attr('data-content', 'Ссылка скопирована').popover('show');
+        $('#frmabcopybtnid').prop('disabled', true);
+        e.clearSelection();
+    });
+
+    frmaclipboard.on('error', function (e) { //error
+        $('#frmabcopypopoverid').attr('data-content', 'Ссылка не скопирована, воспользуйтесь полем ввода ниже')
+                                .popover('show');
+        $('#frmabcopybtnid').prop('disabled', true);
+
+        $('#frmabcopytextarea').val($('#frmabcopybtnid').attr('data-clipboard-text'));
+        $('#frmabcopytextareadiv').css('display', 'block');
+
+        //console.error('Action err:', e.action);
+        //console.error('Trigger err:', e.trigger);
+    });
+
+    //copyToClipboard();
+
+    /*
+    var tdata=$('#frmabcopybtnid').attr('data-clipboard-text');
+    console.log(tdata);
+    var temp_input = $("<input value='" + 11222 + "'>");
+    $("#exampleModal").append(temp_input);
+    temp_input.focus();
+    temp_input.select();
+    document.execCommand("copy");
+    temp_input.remove();
+
+    */

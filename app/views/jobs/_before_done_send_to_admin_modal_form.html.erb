@@ -1,0 +1,34 @@
+<div class="modal" id="beforedoneModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Отправить работу на рассмотрение администратору?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= form_with(model: job, url: before_done_send_to_admin_job_path(job), method: "put", id: "return_form_beforedone") do |f|%>
+          <%= f.hidden_field :status_id, value: 5 %>
+          <div class="form-group">
+            <%= f.label "Комментарий:" %>
+            <%= f.text_area :comment, cols: "20", rows: "5", class: "form-control fontsize16", placeholder: "(комментарий к работе, не обязательно)" %>
+          </div>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button type="submit" id="btn-return-beforedone" form="return_form_beforedone" class="btn btn-primary">Отправить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $('#return_form_beforedone').on('ajax:error', function(event, xhr, status, error) {
+        //https://github.com/rails/jquery-ujs/wiki/ajax
+        $("#btn-return-beforedone").attr("disabled", false);
+    }).on('ajax:beforeSend', function(event, xhr, status, error) {
+        $("#btn-return-beforedone").attr("disabled", true);
+    });
+</script>
